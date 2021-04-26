@@ -28,7 +28,7 @@ int main()
 {
 	// In this line, the code is using cout to send output to the notebook. The `<<` operator is the stream insertion operator, and it writes what's on the right side of the operator to the left side. So in this case, `"Message here"` is written to the output stream `cout`.
 	cout << "Hello World! \n";
-	cout << "You can print messages using \"cout\"\n";
+	cout << "You can print messages using \"cout\"\n\n";
 
 	// Declaring and initializing an int variable.
 	int a = 9;
@@ -39,34 +39,34 @@ int main()
 	// Initializing the string b.
 	b = "Here is a string being initialized";
 
-	cout << "\nDeclaring and initializing an int variable.\n";
-	cout << a << "\n";
+	cout << "Declaring and initializing an int variable.\n";
+	cout << a << "\n\n";
 
-	cout << "\nWe have declared a string variable\n";
-	cout << b << "\n";
+	cout << "We have declared a string variable\n";
+	cout << b << "\n\n";
 
 	// 1D Vectors: used for storing data
 	// C++ also has several container types that can be used for storing data. We will start with vectors, as these will be used throughout this lesson, but we will also introduce other container types as needed.
 	// Vectors are a sequence of elements of a single type, and have useful methods for getting the size, testing if the vector is empty, and adding elements to the vector.
 
 	// Three ways of declaring and initializing vectors.
-	vector<int> v_1{ 0, 1, 2 };
-	vector<int> v_2{ 3, 4, 5 };
-	vector<int> v_3;
-	v_3 = { 6 };
-	cout << "\nEverything worked with declaring and initializing 1D vectors!\n";
+	vector<int> v1{ 0, 1, 2 };
+	vector<int> v2 = { 3, 4, 5 };
+	vector<int> v3;
+	v3 = { 6 };
+	cout << "Everything worked with declaring and initializing 1D vectors!\n\n";
 
 	// 2D Vectors: used for storing data
 	// Unfortunately, there isn't a built-in way to print vectors in C++ using cout. You will learn how to access vector elements and you will write your own function to print vectors later. For now, you can see how vectors are created and stored. Below, you can see how to nest vectors to create 2D containers.
 
 	// Creating a 2D Vector
-	vector<vector<int>> v{ {1, 2}, {3, 4} };
-	cout << "\nGreat! A 2D vector has been created.\n";
+	vector<vector<int>> v1_2D{ {1, 2}, {3, 4} };
+	cout << "Great! A 2D vector has been created.\n\n";
 
 	// Auto: In your previous code, the type for each variable was explicitly declared. In general, this is not necessary, and the compiler can determine the type based on the value being assigned. To have the type automatically determined, use the auto keyword.
-	auto i = 5;
-	auto v_6 = { 1, 2, 3 };
-	cout << "\nVariables declared and initialized without explicitly states type!\n";
+	auto aA = 5;
+	auto aV = { 1, 2, 3 };
+	cout << "Variables declared and initialized without explicitly stating a type!\n\n";
 
 	// A* Search
 	// In order to write the A* search algorithm, you will need a grid or "board" to search through. We'll be working with this board throughout the remaining exercises, and we'll start by storing a hard-coded board in the main function. In later exercises, you will write code to read the board from a file.
@@ -78,26 +78,96 @@ int main()
 		{0, 0, 0, 0, 1, 0} };
 
 	// 1D Vector Access
-	cout << "\nPrinting out an element from the 1D vector \"v_1\"\n";
-	cout << v_1[0] << "\n";
+	cout << "Printing out an element from the 1D vector \"v_1\"\n";
+	cout << v1[0] << "\n\n";
 
 	// 1D Vector Length
-	cout << "\nPrinting out the length from the 1D vector \"v_1\"\n";
-	cout << v_1.size() << "\n";
+	cout << "Printing out the length from the 1D vector \"v_1\"\n";
+	cout << v1.size() << "\n\n";
 
 	// 2D Vector Access
-	cout << "\nPrinting out an element from the 2D vector \"board\"\n";
-	cout << board[1][1] << "\n";
+	cout << "Printing out an element from the 2D vector \"board\"\n";
+	cout << board[1][1] << "\n\n";
 
 	// 2D Vector Length
-	cout << "\nPrinting out the length of a vector from the 2D vector \"board\"\n";
-	cout << board[3].size() << "\n";
+	cout << "Printing out the length of a vector from the 2D vector \"board\"\n";
+	cout << board[3].size() << "\n\n";
 
 	// FOR Loop
-	cout << "\nPrinting out a FOR loop using the integer \"a\".\n";
-	for (int i = 0; i <= a; i++)
+	// Using integer "a" that was initialized earlier in the file.
+	cout << "Printing out a FOR loop using the integer \"a\".\n";
+	for (int i_for = 0; i_for <= a; i_for++)
+		// If you haven't seen the ++ operator before, this is the post-increment operator, and it is where the ++ in the name "C++" comes from. The operator increments the value of i.
+		// There is also a pre-increment operator which is used before a variable, as well as preand post decrement operators: --.The difference between pre and post lies in what value is returned by the operator when it is used.
 	{
-		cout << i << "\n";
+		cout << i_for << "\n";
 	}
+
+	cout << "\n";
+
+	// NEW SECTION
+	auto c = 1;
+
+	// Post-increment assigns c to d and then increments c.
+	auto d = c++;
+
+	cout << "Post-increment example:" << "\n";
+	cout << "The value of d is: " << d << "\n";
+	cout << "The value of c is: " << c << "\n";
+	cout << "\n\n";
+
+	// Reset c to 1.
+	c = 1;
+
+	// Pre-increment increments c, then assigns to d.
+	d = ++c;
+
+	cout << "Pre-increment example:" << "\n";
+	cout << "The value of d is: " << d << "\n";
+	cout << "The value of c is: " << c << "\n";
+	cout << "\n\n";
+
+	// Decrement c;
+	c--;
+	cout << "Decrement example:" << "\n";
+	cout << "The value of c is: " << c << "\n\n";
+
+	// FOR Loop with a Container
+	/*C++ offers several ways to iterate over containers. One way is to use an index-based loop as above. Another way is using a "range-based loop", which you will see frequently in the rest of this course.*/
+	cout << "Printing out the elements from the vector \"forLoop\"\n";
+	vector<int> forLoop{ 1, 2, 3, 4, 5 };
+	for (int i_vector : forLoop)
+	{
+		cout << i_vector << "\n";
+	}
+
+	// Challenge: Print out a double range-based FOR loop that prints all of the entries of the 2D vector
+	cout << "Printing out the elements from the 2D vector \"challengeForLoop\"\n";
+	vector<vector<int>> challengeForLoop{ {1, 2}, {4, 16}, {32, 64} };
+
+	// My Attempt
+	/*for (int i_2DVector : challengeForLoop[1])
+	{
+		cout << "Vector: " << i_2DVector << "\n";
+		for (int ii_2DVector : challengeForLoop[i_2DVector])
+		{
+			cout << "Element: " << ii_2DVector << "\n";
+		}
+	}*/
+
+	// Correct Answer
+	// You can use auto or vectot<int>. Use auto if you are not sure what to use.
+	// You can also purposely use the wrong one like "int" and read the error to see what you need to use. Try it.
+	for (auto i_2DVector : challengeForLoop)
+	{
+		for (int ii_2DVector : i_2DVector)
+		{
+			cout << ii_2DVector << " ";
+		}
+		cout << "\n";
+	}
+
+
+
 
 }
