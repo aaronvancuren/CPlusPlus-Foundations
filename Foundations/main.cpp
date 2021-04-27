@@ -12,7 +12,10 @@
 
 // The #include is a preprocessor command which is executed before the code is compiled. It searches for the iostream header file and pastes its contents into the program. iostream contains the declarations for the input/output stream objects.
 #include <iostream>
+#include <fstream>
+#include <numeric>
 #include <string>
+#include <sstream>
 #include <vector>
 
 
@@ -21,8 +24,99 @@
 // cout is an output stream you will use to send output to the notebook or to a terminal, if you are using one.
 // Note that the second two lines in the example end with a semicolon ;. Coding statements end with a semicolon in C++. The #include statement is a preprocessor command, so it doesn't need one.
 using std::cout;
+using std::ifstream;
+using std::istringstream;
 using std::string;
 using std::vector;
+using std::accumulate;
+
+// Functions delcared and defined here.
+int AdditionFunction(int e, int f)
+{
+	return e + f;
+}
+
+// Vector Sum Function
+// We may also want to use "const" in front of the vector<int> and element to tell the complier that we will not be changing anything and the the vector will remain CONSTant
+int VectorSum(const vector<int> vector /*&vector << this is better practice as it a reference that passes the vector through the function vs making a copy*/)
+{
+	// Set a base variable
+	int sum = 0;
+
+	// We could also reference the elements of a vector here too "&element"
+	for (const int element : vector)
+	{
+		// Add each vector element to the sum variable
+		sum += element;
+	}
+	// Return the sum variable
+	return sum;
+
+	// Basic Interation
+	/*int sum = 0;
+	for (int i = 0; i < v.size(); ++i)
+		sum += v[i];
+	return sum;*/
+
+	// Inerator
+	/*int sum = 0;
+	for (auto i = v.begin(); i != v.end(); ++i)
+		sum += *i;   The *i dereferences
+	return sum;*/
+
+	// Accumulate Function
+	/*You will need to add #include<numeric>   Optional: using std::accumulate
+		if you added the using statement then you just need to write accumulate instead of std::accumulate everytime
+		return std::accumulate(v.begin(), v.end(), 0);*/
+}
+
+// Print Strings Function
+void PrintStrings(string a, string b)
+{
+	cout << a << " " << b << "\n\n";
+	// Good practice to add return; even if the return value is void although not needed
+	return;
+}
+
+// Print Board Function - My Solution
+void VectorBoard(const vector<vector<int>> vBoard)
+{
+	// I will be referencing VectorSum and the 2D Vector FOR loop
+
+	for (const auto vector : vBoard)
+	{
+		for (const int element : vector)
+		{
+			cout << element << " ";
+		}
+		cout << "\n";
+	}
+	return;
+}
+
+// Another solution for printing out the vector board
+//void PrintBoard(const vector<vector<int>> board) {
+//	for (int i = 0; i < board.size(); i++) {
+//		for (int j = 0; j < board[i].size(); j++) {
+//			cout << board[i][j];
+//		}
+//		cout << "\n";
+//	}
+//}
+
+void ReadBoardFile(string path)
+{
+	ifstream vector_board(path);
+	if (vector_board)
+	{
+		cout << "The file stream has been created!" << "\n";
+		string line;
+		while (getline(vector_board, line))
+		{
+			cout << line << "\n";
+		}
+	}
+}
 
 int main()
 {
@@ -76,6 +170,10 @@ int main()
 		{0, 1, 0, 0, 0, 0},
 		{0, 1, 0, 0, 0, 0},
 		{0, 0, 0, 0, 1, 0} };
+
+	cout << "Print out the vector \"board\"\n";
+	VectorBoard(board);
+	cout << "\n\n";
 
 	// 1D Vector Access
 	cout << "Printing out an element from the 1D vector \"v_1\"\n";
@@ -160,14 +258,110 @@ int main()
 	// You can also purposely use the wrong one like "int" and read the error to see what you need to use. Try it.
 	for (auto i_2DVector : challengeForLoop)
 	{
-		for (int ii_2DVector : i_2DVector)
+		for (int v_2DVector : i_2DVector)
 		{
-			cout << ii_2DVector << " ";
+			cout << v_2DVector << " ";
 		}
 		cout << "\n";
 	}
 
+	// FUNCTIONS
+	// When a function is declared and defined in a single C++ file, the basic syntax is as follows: "return_type FunctionName(parameter_list) { Body of function here. }"
+	// The function is also declared and defined outside of the main(). See beginning of file.
 
+	auto g = 3;
+	auto h = 7;
+	cout << "\nAddition function works!\n";
+	cout << AdditionFunction(g, h) << "\n\n";
 
+	vector<int> v4{ 1, 2, 3 };
+	cout << "Vector sum function works!\n";
+	cout << VectorSum(v4) << "\n\n";
+	// Accumulate: you can completely delete the function we added outside of main() and do it in one line
+	// The first few methods we used are ways to create your own library. C++ comes with the standard (std) library where people have already created similiar functions. I encourage you to go check out the details of those files.
+	// cout << std::accumulate(v.begin(), v.end(), 0) << "\n";
 
+	// Return Void Type
+	string s1 = "C++ is";
+	string s2 = "super awesome.";
+
+	PrintStrings(s1, s2);
+
+	// WHILE loop with an integrated IF statement to print out even numbers
+	auto j = 0;
+	while (j <= 10)
+	{
+		if (j % 2 == 0)
+		{
+			cout << j << "\n";
+			j++;
+		}
+		j++;
+	}
+	cout << "\n";
+
+	// File Input Streams
+	// In C++, you can use the std::ifstream object to handle input file streams.To do this, you will need to include the header file that provides the file streaming classes : <fstream>.
+	// Once the <fstream> header is included, a new input stream object can be declared and initialized using a file path path:
+	//	std::ifstream my_file;
+	//	my_file.open(path);
+	// Alternatively, the declarationand initialization can be done in a single line as follows :
+	// 	std::ifstream my_file(path);
+	// C++ ifstream objects can also be used as a boolean to check if the stream has been created successfully. If the stream were to initialize successfully, then the ifstream object would evaluate to true. If there were to be an error opening the file or some other error creating the stream, then the ifstream object would evaluate to false.
+	// If the input file stream object has been successfully created, the lines of the input stream can be read using the getline method. In the cell below, a while loop has been added to the previous example to get each line from the stream and print it to the console.
+
+	const string path = "D:/Udacity/Foundations/Foundations/vector_board";
+	ReadBoardFile(path);
+	cout << "\n";
+
+	// PROCESSING STRINGS - Only have one of the following methods uncommented at a time
+	// Now that the board is being read into your program line by line, you will want to process each line and store the data, rather than just streaming it to cout. There are many ways to do this in C++, but we will focus on istringstream from the <sstream> header file.
+
+	string k("1 2 3");
+	istringstream my_stream(k);
+	int l;
+
+	// Extraction Operator >> will read until whitespace is reached or until the stream fails
+	// Method 1
+	// my_stream >> l;
+	// cout << l << "\n\n";
+
+	// The istringstream object can also be used as a boolean to determine if the last extraction operation failed - this happens if there wasn't any more of the string to stream, for example. If the stream still has more characters, you are able to stream again. See the following code for an example of using the istringstream this way:
+	// 
+	// Testing to see if the stream was successful and printing results.
+	// Method 2
+	/*while (my_stream)
+	{
+		my_stream >> l;
+		if (my_stream)
+		{
+			cout << "That stream was successful: " << l << "\n";
+		}
+		else {
+			cout << "That stream was NOT successful!" << "\n";
+		}
+	}
+	cout << "\n";*/
+
+	// The extraction operator >> writes the stream to the variable on the right of the operator and returns the istringstream object, so the entire expression my_stream >> n is an istringstream object and can be used as a boolean! Because of this, a common way to use istringstream is to use the entire extraction expression in a while loop as follows:
+	// Method 3
+	while (my_stream >> l) {
+		cout << "That stream was successful: " << l << "\n";
+	}
+	cout << "The stream has failed." << "\n\n";
+
+	// Strings with Mixed Types
+	// In the stream example above, the string contained only whitespaces and characters which could be converted to ints. If the string has mixed types, more care is needed to process the string. In the following example, the type char is used, which is a type that can hold only a single ASCII character.
+	string k2("1,2,3");
+	istringstream my_stream2(k2);
+	char m;
+	int n;
+
+	while (my_stream2 >> n >> m) {
+		cout << "That stream was successful: " << n << " " << m << "\n";
+	}
+	cout << "The stream has failed." << "\n\n";
+	// In that example, notice that the 3 was not printed! The expression:
+	// 	my_stream >> n >> c
+	// tried to stream an int followed by a char.Since there was no char after the 3, the stream failedand the while loop exited.
 }
