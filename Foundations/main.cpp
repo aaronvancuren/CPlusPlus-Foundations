@@ -1,4 +1,4 @@
-// main.cpp : This file contains the 'main' function. Program execution begins and ends there.
+﻿// main.cpp : This file contains the 'main' function. Program execution begins and ends there.
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
 
@@ -29,6 +29,9 @@ using std::istringstream;
 using std::string;
 using std::vector;
 using std::accumulate;
+
+// Formatting the Printed Board
+enum class State { kEmpty, kObstacle };
 
 // Functions delcared and defined here.
 int AdditionFunction(int e, int f)
@@ -115,6 +118,160 @@ void ReadBoardFile(string path)
 		{
 			cout << line << "\n";
 		}
+	}
+}
+
+// Parse Lines from the File
+// Write a vector<int> ParseLine function which accepts a string as an argument. Use std::istringstream to parse the line by comma chars, and store the ints in a vector<int>. ParseLine should return the vector after parsing.
+
+vector<int> ParseLine(string line)
+{
+	istringstream sline(line);
+	int i;
+	char c;
+	vector<int> row;
+	while (sline >> i >> c && c == ',')
+	{
+		row.push_back(i);
+	}
+	return row;
+}
+
+// Test ParseLine
+void PrintVector(vector<int> vector) {
+	cout << "{ ";
+	for (auto element : vector) {
+		cout << element << " ";
+	}
+	cout << "}" << "\n";
+}
+
+// Test ParseLine
+void TestParseLine() {
+	cout << "----------------------------------------------------------" << "\n";
+	cout << "TestParseLine: ";
+	string line = "0,1,0,0,0,0,";
+	vector<int> solution_vector{ 0,1,0,0,0,0 };
+	vector<int> test_vector;
+	test_vector = ParseLine(line);
+	if (test_vector != solution_vector) {
+		cout << "failed" << "\n";
+		cout << "\n" << "Test input string: " << line << "\n";
+		cout << "Your parsed line: ";
+		PrintVector(test_vector);
+		cout << "\n";
+	}
+	else {
+		cout << "passed" << "\n";
+	}
+	cout << "----------------------------------------------------------" << "\n";
+	return;
+}
+
+// EXERCISE: Update ReadBoardFile
+// Update ReadBoardFile to use ParseLine and return the board as a vector<vector<int>>. You can read the TODO comments in the code for step by step instructions.
+// Update the main function to pass the results of ReadBoardFile to the PrintBoard (VectorBoard) function.
+
+// TODO: Change the return type of ReadBoardFile.
+vector<vector<int>> ReadBoardFileExercise(string path)
+{
+	ifstream vector_board(path);
+	// TODO: Declare an empty board variable here with
+	// type vector<vector<int>>.
+	vector<vector<int>> exerciseBoard{};
+	if (vector_board)
+	{
+		string line;
+		while (getline(vector_board, line))
+		{
+			// TODO: Replace the "cout" code with a call to ParseLine for each line and push the results of ParseLine to the back of the board.
+			// cout << line << "\n";
+			vector<int> row = ParseLine(line);
+			exerciseBoard.push_back(row);
+		}
+	}
+	// TODO: Return the board variable.
+	return exerciseBoard;
+}
+
+// Formatting the Printed Board
+// TODO: Create the CellString function here,
+// using the following return strings:
+// "⛰️   "
+// "0   "
+string CellString(State cell)
+{
+	switch (cell)
+	{
+	case State::kObstacle: return "⛰️   ";
+	default: return "0   ";
+	}
+}
+
+// STORE THE BOARD USING THE STATE ENUM
+// TODO: Change the return type to use auto or
+// explicitly indicate vector<State>
+vector<State> ParseLineStoreBoard(string line) {
+	istringstream sline(line);
+	int n;
+	char c;
+	// TODO: Change the variable type for row
+	// to be a vector<State>
+	vector<State> row;
+	while (sline >> n >> c && c == ',') {
+		// TODO: Modify the line below to push_back
+		// a State::kEmpty if n is 0, and push_back
+		// a State::kObstacle otherwise.
+		// row.push_back(n);
+		if (n == 0)
+		{
+			row.push_back(State::kEmpty);
+		}
+		else
+		{
+			row.push_back(State::kObstacle);
+		}
+	}
+	return row;
+}
+
+// TODO: Modify the return type here as well. Just
+// as above, the board will contain State objects
+// instead of ints.
+vector<vector<State>> ReadBoardFileStoreBoard(string path) {
+	ifstream vector_board(path);
+	// TODO: Modify the board declaration to store 
+	// State objects instead of ints.
+	vector<vector<State>> storeBoard{};
+	if (vector_board) {
+		string line;
+		while (getline(vector_board, line)) {
+			// TODO: Modify the row type to use State
+			// objects instead of ints.
+			vector<State> row = ParseLineStoreBoard(line);
+			storeBoard.push_back(row);
+		}
+	}
+	return storeBoard;
+}
+
+// TODO: Modify the function signature below to accept
+// cells with State type instead of int type.
+string CellStringStoreBoard(State cell) {
+	switch (cell) {
+	case State::kObstacle: return "⛰️   ";
+	default: return "0   ";
+	}
+}
+
+void PrintBoardStoreBoard(const vector<vector<State>> storeBoard) {
+	for (int i = 0; i < storeBoard.size(); i++) {
+		for (int j = 0; j < storeBoard[i].size(); j++) {
+			// TODO: Modify the line below to call CellString
+			// on each element of the board before streaming to cout.
+			cout << CellStringStoreBoard(storeBoard[i][j]);
+		}
+		cout << "\n";
 	}
 }
 
@@ -313,6 +470,8 @@ int main()
 	const string path = "D:/Udacity/Foundations/Foundations/vector_board";
 	ReadBoardFile(path);
 	cout << "\n";
+	TestParseLine();
+	cout << "\n";
 
 	// PROCESSING STRINGS - Only have one of the following methods uncommented at a time
 	// Now that the board is being read into your program line by line, you will want to process each line and store the data, rather than just streaming it to cout. There are many ways to do this in C++, but we will focus on istringstream from the <sstream> header file.
@@ -345,7 +504,8 @@ int main()
 
 	// The extraction operator >> writes the stream to the variable on the right of the operator and returns the istringstream object, so the entire expression my_stream >> n is an istringstream object and can be used as a boolean! Because of this, a common way to use istringstream is to use the entire extraction expression in a while loop as follows:
 	// Method 3
-	while (my_stream >> l) {
+	while (my_stream >> l)
+	{
 		cout << "That stream was successful: " << l << "\n";
 	}
 	cout << "The stream has failed." << "\n\n";
@@ -357,11 +517,162 @@ int main()
 	char m;
 	int n;
 
-	while (my_stream2 >> n >> m) {
+	while (my_stream2 >> n >> m)
+	{
 		cout << "That stream was successful: " << n << " " << m << "\n";
 	}
 	cout << "The stream has failed." << "\n\n";
-	// In that example, notice that the 3 was not printed! The expression:
-	// 	my_stream >> n >> c
-	// tried to stream an int followed by a char.Since there was no char after the 3, the stream failedand the while loop exited.
+	// In that example, notice that the 3 was not printed! The expression: "my_stream >> n >> c" tried to stream an int followed by a char. Since there was no char after the 3, the stream failed and the WHILE loop exited.
+
+	// Vector push_back
+	// Now that you are able to process a string, you may want to store the results of the processing in a convenient container for later use. In the next exercise, you will store the streamed ints from each line of the board in a vector<int>. To do this, you will add the ints to the back of the vector, using the vector method push_back
+
+	// Initial Vector
+	vector<int> v5{ 1, 2, 3 };
+
+	// Print the contents of the vector
+	for (int o = 0; o < v5.size(); o++)
+	{
+		cout << v5[o] << "\n";
+	}
+	cout << "\n";
+
+	// Push 4 to the back of the vector
+	v5.push_back(4);
+
+	// Print the contents again
+	for (int p = 0; p < v5.size(); p++)
+	{
+		cout << v5[p] << "\n";
+	}
+	cout << "\n";
+
+	// STOP AND LOOK
+	// IMPORTANT: http://www.cplusplus.com/
+	// STOP AND LOOK
+
+	// See ParseLine Function
+
+	// TODO: Store the output of ReadBoardFile in the "board" variable.
+	const string pathExercise = "D:/Udacity/Foundations/Foundations/vector_board";
+	auto boardExercise = ReadBoardFileExercise(path);
+	// TODO: Uncomment PrintBoard below to print "board".
+	VectorBoard(boardExercise);
+	cout << "\n";
+
+	// ENUMS
+	// Create the enum Color with fixed values.
+	enum class Color { white, black, blue, red };
+	// In the example above, the keyword enum is followed by the keyword class and then the class name Color. This creates what are called "scoped" enums. It is also possible, but not advisable, to omit the class keyword and thus create "unscoped" enums. https://en.cppreference.com/w/cpp/language/enum
+
+	// Create a Color variable and set it to Color::blue.
+	Color my_color = Color::blue;
+
+	// Test to see if my car is red.
+	if (my_color == Color::red)
+	{
+		cout << "The color of my car is red!" << "\n\n";
+	}
+	else
+	{
+		cout << "The color of my car is not red." << "\n\n";
+	}
+
+	// Below is another example of an enum being used. Here, a custom type Direction is created with four possible values: kUp, kDown, kLeft, kRight. One of these values is then stored in a variable and used in the switch statement.
+	enum class Direction { kUp, kDown, kLeft, kRight };
+
+	Direction q = Direction::kUp;
+
+	switch (q)
+	{
+	case Direction::kUp: cout << "Going up!" << "\n";
+		break;
+	case Direction::kDown: cout << "Going down!" << "\n";
+		break;
+	case Direction::kLeft: cout << "Going left!" << "\n";
+		break;
+	case Direction::kRight: cout << "Going right!" << "\n";
+		break;
+	}
+
+	cout << "\n";
+
+	// Formatting the Printed Board
+	// The board will eventually have more than two cell states as the program becomes more complicated, and it would be nice to add formatting to the printed output of the board to ensure readability as the number of board states increases.
+	// To accommodate more board statesand facilitate print formatting, we have provided the State enum with enumerator values kEmptyand kObstacle.In this exercise, you will write a CellString function which converts each State to an appropriate string.In the next exercise, we will update the program to use the enum valuesand CellString function.
+
+	// Check State Enum and CallString Function Above
+
+	// Store the Board Using the State Enum
+	// Follow the TODO comments above, and update the program to store a board of State variables. When you are done, the board should print as in the image above. Note that you will need to call CellString on each object in the board before printing: CellString(board[i][j]).
+	const string pathStoreBoard = "D:/Udacity/Foundations/Foundations/vector_board";
+	auto storeBoard = ReadBoardFileStoreBoard(pathStoreBoard);
+	PrintBoardStoreBoard(storeBoard);
+
 }
+
+
+// PROGRAM REVIEW FOR THE LESSON
+// 
+//#include <fstream>
+//#include <iostream>
+//#include <sstream>
+//#include <string>
+//#include <vector>
+//using std::cout;
+//using std::ifstream;
+//using std::istringstream;
+//using std::string;
+//using std::vector;
+//
+//enum class State { kEmpty, kObstacle };
+//
+//vector<State> ParseLine(string line) {
+//	istringstream sline(line);
+//	int n;
+//	char c;
+//	vector<State> row;
+//	while (sline >> n >> c && c == ',') {
+//		if (n == 0) {
+//			row.push_back(State::kEmpty);
+//		}
+//		else {
+//			row.push_back(State::kObstacle);
+//		}
+//	}
+//	return row;
+//}
+//
+//vector<vector<State>> ReadBoardFile(string path) {
+//	ifstream myfile(path);
+//	vector<vector<State>> board{};
+//	if (myfile) {
+//		string line;
+//		while (getline(myfile, line)) {
+//			vector<State> row = ParseLine(line);
+//			board.push_back(row);
+//		}
+//	}
+//	return board;
+//}
+//
+//string CellString(State cell) {
+//	switch (cell) {
+//	case State::kObstacle: return "⛰️   ";
+//	default: return "0   ";
+//	}
+//}
+//
+//void PrintBoard(const vector<vector<State>> board) {
+//	for (int i = 0; i < board.size(); i++) {
+//		for (int j = 0; j < board[i].size(); j++) {
+//			cout << CellString(board[i][j]);
+//		}
+//		cout << "\n";
+//	}
+//}
+//
+//int main() {
+//	auto board = ReadBoardFile("1.board");
+//	PrintBoard(board);
+//}
