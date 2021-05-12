@@ -1,6 +1,22 @@
 #include <iostream>
+#include <vector>
 
 using std::cout;
+using std::vector;
+
+void AddOne(int* j)
+{
+    // Dereference the pointer and increment the int being pointed to.
+    (*j)++;
+}
+
+int* AddOne_Return(int& j)
+{
+    // Increment the referenced int and return the
+    // address of j.
+    j++;
+    return &j;
+}
 
 int main()
 {
@@ -58,4 +74,39 @@ int main()
     cout << "The address of d is:          " << &d << "\n";
     cout << "The variable pointer_to_d is: " << pointer_to_d << "\n";
     cout << "The value of the variable pointed to by pointer_to_d is: " << *pointer_to_d << "\n";
+
+    // Vector v is declared and initialized to {1, 2, 3}
+    vector<int> v{ 1, 2, 3 };
+
+    // Declare and initialize a pointer to the address of v here:
+    vector<int>* pointer_to_v = &v;
+
+    // The following loops over each int a in the vector v and prints.
+    // Note that this uses a "range-based" for loop: https://www.geeksforgeeks.org/range-based-loop-c/
+    for (int a : v) {
+        cout << a << "\n";
+    }
+
+    // Dereference your pointer to v and print the int at index 0 here (note: you should print 1):
+    cout << "The first element of v is: " << (*pointer_to_v)[0] << "\n";
+
+    // Pointers can be used in another form of pass-by-reference when working with functions. When used in this context, they work much like the references that you used for pass-by reference previously. If the pointer is pointing to a large object, it can be much more efficient to pass the pointer to a function than to pass a copy of the object as with pass-by-value.
+
+    // In the following code, a pointer to an int is created, and that pointer is passed to a function.The object pointed to is then modified in the function.
+
+    cout << "The value of i is: " << i << "\n";
+
+    // Declare a pointer to i:
+    int* pi = &i;
+    AddOne(pi);
+    cout << "The value of i is now: " << i << "\n";
+
+    int k = 1;
+    cout << "The value of k is: " << k << "\n";
+
+    // Declare a pointer and initialize to the value
+    // returned by AddOne:
+    int* my_pointer = AddOne_Return(k);
+    cout << "The value of k is now: " << k << "\n";
+    cout << "The value of the int pointed to by my_pointer is: " << *my_pointer << "\n";
 }
