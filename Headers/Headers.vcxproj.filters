@@ -18,8 +18,25 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vector_board">
+    <ClCompile Include="vect_add_one.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="increment_and_sum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NOTES">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="header_example.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="increment_and_sum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vect_add_one.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
